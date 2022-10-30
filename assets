@@ -1,0 +1,432 @@
+############-A3-############
+
+A.	Design Data Frame from customer_churn.csv
+1.	Working with arithmetic operators:
+a.	Add 5 to the fifth record of ‘MonthlyCharges’ column
+b.	Subtract 9.65 from the sixth record of ‘MonthlyCharges’ column
+c.	Multiply the 1st record of ‘MonthlyCharges’ column with 3
+d.	Divide the 37th record of ‘MonthlyCharges’ column with 3
+2.	Working with the relational operators:
+a.	Check if the value of ‘tenure’ in the 1st row is greater than the value of ‘tenure’ in the 10th row
+b.	Check if the value of ‘tenure’ in the 3rd row is equal to the value of ‘tenure’ in the 5th row
+3.	Working with logical operators:
+a.	Get the count of those customers who have subscribed to both “TechSupport” & “StreamingTV”
+b.	Extract those customers whose ‘InternetService’ is either ‘DSL’ or ‘Fiber optic’ & store the result in ‘Internet_dsl_fiber’
+4.	Create two vectors X and Y. X have numbers {12, 23, 34, 45, 56, 67, 78, 89, 90} and Y has a sequence of equal-spaced 9 numbers from 54 to 6. With reference to vector X and Y, perform the following tasks:
+a. Display X, Y and their length of vectors.
+b. Add 5 to all members of X and store it in a vector X_add_5. Display X_add_5.
+c. Multiply 5 to all members of Y and store it in a vector Y_times_5. Display Y_times_5.
+d. Add all the individual elements of X and Y and store it in a vector Sum_XY. Display Sum_XY.
+e. Multiply all the individual elements of X and Y and store it in a vector Prod_XY. Display Prod_XY.
+f. List all the objects created till now.
+g. Remove the vector Prod_XY.
+h. Display square root of all the elements of Sum_XY.
+i. Create a vector Z such that each element of vector X_add_5 is raised to the power of corresponding element at same position in vector Y_times_5.
+Check how many Na are in churn data frame. Get details of customer having internet services DSL and tenure>45, Get Max tenure
+
+
+dat = read.csv(file = "C:/Users/praty/Desktop/customer-churn.csv")
+head(dat)
+
+#A
+#1.a
+dat$MonthlyCharges[5]+5
+#1.b
+dat$MonthlyCharges[6]-9.65
+#1.c
+dat$MonthlyCharges[1]*3
+#1.d
+dat$MonthlyCharges[37]/3
+
+#2.a
+if (dat$tenure[1]>dat$tenure[10]){
+  print("Greater than")
+}else{
+  print("Lesser than")
+}
+
+#2.b
+if (dat$tenure[3]==dat$tenure[5]){
+  print("Equal")
+}else{
+  print("Not Equal")
+}
+
+#3.a
+sum(dat$TechSupport=="Yes" & dat$StreamingTV=="Yes")
+
+#3.b
+Internet_dsl_fiber=ifelse(dat$InternetService=="DSL"|dat$InternetService=="Fiber optic",dat$customerID,"")
+Internet_dsl_fiber
+
+
+#4
+X=c(12,23,34,45,56,67,78,89,90)
+Y=c(54)
+
+for (i in 54:0){
+  if(i%%6==0 && i-6>0){
+    Y<-append(Y,i-6)
+  }
+}
+
+#4.a
+print("Vector X: ")
+print(X)
+print(paste("Length of X: ",length(X)))
+
+print("Vector Y: ")
+print(Y)
+print(paste("Length of Y: ",length(Y)))
+
+#4.b
+X_add_5 = c()
+
+for(i in X){
+  X_add_5<-append(X_add_5,i+5)
+}
+X_add_5 
+
+#4.c
+Y_times_5 = c()
+
+for(i in Y){
+  Y_times_5<-append(Y_times_5,i*5)
+}
+Y_times_5
+
+#4.d
+Sum_XY = c()
+Sum_XY<-append(Sum_XY,X+Y)
+Sum_XY
+
+#4.e
+Prod_XY = c()
+Prod_XY<-append(Prod_XY,X*Y)
+Prod_XY
+
+#4.f
+X
+Y
+X_add_5
+Y_times_5
+Sum_XY
+Prod_XY
+
+#4.g
+remove(Prod_XY)
+
+#4.h
+for(i in Sum_XY)
+{
+  print(sqrt(i))
+}
+
+#4.i
+Z=c()
+for(i in 0:length(X_add_5)){
+  Z<-append(Z,X_add_5[i]^Y_times_5[i])
+  print(X_add_5[i])
+}
+X_add_5
+Y_times_5
+Z
+
+##or
+
+ZZ=c()
+ZZ<-append(ZZ,X_add_5^Y_times_5)
+ZZ
+
+
+#5
+print(paste("Missing Values in Churn: ",sum(is.na(dat$Churn))))
+
+print("Details of customers with DSL and tensure>45")
+for(i in 1:length(dat$InternetService)){
+  if(!is.na(dat$InternetService[i]) && !is.na(dat$tenure[i])){
+    if(dat$InternetService[i]=="DSL" && dat$tenure[i]>45){
+      print(dat$customerID[i])
+    }
+  }
+}
+
+
+print(paste("Max tenure: ",max(dat$tenure)))
+
+#--------------------------------
+
+
+############-A4 A5-############
+
+Solve Following Business Problems
+Q1. Create Data frame Air from air quality dataset in R studio
+Q2. Find Mean of Ozone Variable
+Q3. Find Standard Deviation Median for Ozone, Solar.R variable
+Q4. Check which variable of air quality Dataset has NA value
+Q5. Data Cleaning
+ Performed below data cleaning operation 
+a.	Removed NA (Missing Value) from ozone variable
+b.	Using For loop Removed NA from ozone variable
+c.	View Summary to check if NA values are removed
+d.	Removed NA (Missing Value) from Solar.R variable
+e.	View Summary to check if NA values are removed
+f.	Performed head operation to see first 5 observation
+Q6. Data Transformation
+a.	Add one additional variable as Solar.Danger to Air data frame. Create this variable from Solar.R  and store value as Yes or No if solar.R>100
+b.	Divide the Solar.R values into interval (0,50,100,150,200,250,300,350) and replace values of Solar.R as interval values with common interval 50.
+c.	Replace Month Number with Month Name as May , June and So on
+d.	Using For loop Replace Month Number with Month Name as May , June and So on
+Q7.
+a.	 Install library plyr
+b.	Include library plyr
+c.	Plot histogram for ozone variable
+Q8.
+a.	Handle missing data for TotalCharges column in customer_churn.csv using
+Median. 
+
+head(airquality)
+
+#Q1
+dat = data.frame(airquality)
+head(dat)
+
+#Q5.a
+#to remove NA from dataset
+datWithoutNA = na.omit(dat)
+head(datWithoutNA)
+
+#Q2.
+mean(datWithoutNA$Ozone)
+
+#Q3.
+sd(datWithoutNA$Ozone)
+sd(datWithoutNA$Solar.R)
+
+median(datWithoutNA$Ozone)
+median(datWithoutNA$Solar.R)
+
+#Q4.
+names(which(colSums(is.na(dat))>0))
+
+#Q5.b
+l=c()
+j=1
+
+for(i in dat$Ozone){
+  if(!is.na(i)){
+    l[j]=i
+    j=j+1
+  }
+}
+l
+
+
+#Q5.c
+summary(datWithoutNA)
+
+
+#Q5.d
+l=c()
+j=1
+
+for(i in dat$Solar.R){
+  if(!is.na(i)){
+    l[j]=i
+    j=j+1
+    #l<-append(l,i)
+  }
+}
+l
+
+#Q5.e
+summary(datWithoutNA)
+summary(l)
+
+#Q5.f
+head(datWithoutNA)
+
+#Q6.a
+datWithoutNA$Solar.Danger<-ifelse ((datWithoutNA$Solar.R>100), "YES ", 0)
+ifelse((datWithoutNA$Solar.R<100),"No", 0)
+datWithoutNA$Solar.R
+
+### actual
+datWithoutNA$Solar.Test<-ifelse(datWithoutNA$Solar.R>100,"YES","NO")
+datWithoutNA$Solar.Test
+
+#Q6.b
+cut(datWithoutNA$Solar.R, c(seq(0,350,by=50)))
+
+#Q6.c
+mymonth<-c ("Jan" , "Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+datWithoutNA$Month
+datWithoutNA$Monthreplace<-mymonth[ datWithoutNA$Month]
+datWithoutNA$Monthreplace
+
+#Q6.d
+len = length(datWithoutNA$Ozone)
+for (i in 1:len){
+  if(datWithoutNA$Month[i]==5){
+    datWithoutNA$Month[i]="May"
+  }
+  else if(datWithoutNA$Month[i]==6){
+    datWithoutNA$Month[i]="Jun"
+  }
+  else if(datWithoutNA$Month[i]==7){
+    datWithoutNA$Month[i]="Jul"
+  }
+  else if(datWithoutNA$Month[i]==8){
+    datWithoutNA$Month[i]="Aug"
+  }
+  else if(datWithoutNA$Month[i]==9){
+    datWithoutNA$Month[i]="Sep"
+  }
+}
+datWithoutNA$Month
+
+#Q7
+install.packages("plyr")
+library(plyr)
+hist(datWithoutNA$Ozone)
+
+#Q8
+datx = read.csv("C:/Users/praty/Desktop/NMIMS HW S3/Raw Files S3/churn.csv")
+head(datx)
+datxWithoutNA = na.omit(datx)
+head(datxWithoutNA)
+
+median(datxWithoutNA$TotalCharges)
+datx[is.na(datx)]=0
+median(datx$TotalCharges)
+
+#--------------------------------
+
+
+############-A6 : Plotting-############
+
+install.packages('ggplot2', dependencies = TRUE)#call library
+library(ggplot2)
+
+dat = read.csv(file = "C:/Users/praty/Desktop/telco.csv")
+head(dat)
+
+str(dat)
+
+datWithoutNA = na.omit(dat)
+
+temp = datWithoutNA
+
+library(plyr)
+temp$Churn <- revalue(temp$Churn, c("Yes"=1))
+temp$Churn <- revalue(temp$Churn, c("No"=0))
+temp$Churn
+
+temp$
+temp$Churn
+
+A = c(17,38,8,93,1)
+barplot(A,xlab='X-axis',ylab='Y-lab',main="barchart",horiz=TRUE,col="green")
+
+ggplot(datWithoutNA, aes(x=variable,fill=Churn))+ geom_bar() + labs(title="your title", x="x axis", x="y axis")
+
+barplot(temp$Churn,xlab='X-axis',ylab='Y-lab',main="barchart",horiz=TRUE,col="green")
+
+
+#Bar Plot #1
+ggplot(dat, aes(x=gender,fill=Churn))+ geom_bar() + labs(title="Gender Demographic", x="gender", y="count")
+ggplot(dat, aes(x=SeniorCitizen ,fill=Churn))+ geom_bar() + labs(title="Senior Citizen Demographic", x="SeniorCitizen", y="count")
+ggplot(dat, aes(x=Dependents ,fill=Churn))+ geom_bar() + labs(title="Dependents Demographic", x="Dependents", y="count")
+ggplot(dat, aes(x=Partner,fill=Churn))+ geom_bar() + labs(title="Partner Demographic", x="Partner", y="count")
+
+
+#Bar Plot #2
+ggplot(dat, aes(x=OnlineSecurity,fill=Churn))+ geom_bar() + labs(title="Online Security Demographic", x="OnlineSecurityr", y="count")
+ggplot(dat, aes(x=OnlineBackup ,fill=Churn))+ geom_bar() + labs(title="Online Backup Demographic", x="OnlineBackup", y="count")
+ggplot(dat, aes(x=DeviceProtection ,fill=Churn))+ geom_bar() + labs(title="Device Protection Demographic", x="DeviceProtection", y="count")
+ggplot(dat, aes(x=TechSupport,fill=Churn))+ geom_bar() + labs(title="Tech Support Demographic", x="TechSupport", y="count")
+ggplot(dat, aes(x=StreamingTV,fill=Churn))+ geom_bar() + labs(title="Streaming TV Demographic", x="StreamingTV", y="count")
+ggplot(dat, aes(x=StreamingMovies ,fill=Churn))+ geom_bar() + labs(title="Streaming Movies Demographic", x="StreamingMovies", y="count")
+
+
+#Line Chart
+ggplot(dat,aes(x=tenure,color=Churn))+geom_line(aes(x=tenure,y=Contract))+geom_freqpoly(size=1)
+ggplot(dat,aes(x=tenure,color=Churn))+geom_line(aes(x=tenure,y=MonthlyCharges))+geom_freqpoly(size=1)
+
+
+#Scatter Plot
+ggplot(dat,aes(x=MonthlyCharges, y=TotalCharges,group=Churn))+geom_point(aes(color=Churn))
+
+
+#Box Plot
+ggplot(data=dat)+geom_boxplot(aes(x=Churn,y=TotalCharges,fill=Churn))
+
+
+#Histogram
+ggplot(subset(dat, PhoneService %in% c("Yes") & InternetService %in% c("DSL"," Fiber optic")), 
+       aes(x = MonthlyCharges, fill = Churn)) + geom_histogram()
+
+#--------------------------------
+
+
+############-A7 : Correlation-############
+
+install.packages('corrplot')
+#Task 1
+x <- c(1, 3, 5, 10)
+y <- c(2, 4, 6, 20)
+
+##Print covariance using different methods
+print(cov(x, y))
+print(cov(x, y, method = "pearson"))
+print(cov(x, y, method = "kendall"))
+print(cov(x, y, method = "spearman"))
+
+
+#Task 2
+d = iris
+head(d)
+
+d = data.frame(x1=rnorm(!0),x2=rnorm(10),x3=rnorm(10))
+cor(d)
+
+#Task 4
+m=cor(d)
+m
+
+library(corrplot)
+corrplot(m,method="square")
+
+x=matrix(rnorm(2),nrow=5,ncol=4)
+x
+y=matrix(rnorm(15),nrow=5,ncol=3)
+y
+COR=cor(x,y)
+COR
+
+##correlation plot
+install.packages('gtlcharts')
+library('gtlcharts')
+image(x=seq(dim(x)[2]))
+Y<-seq(dim(y)[2])
+Z=COR(xlab="xcolumn",ylab="y column")
+
+data(iris)
+IrisSspecies<-NULL
+Iplotcorr(iris,reoder=TRUE)
+
+
+###>>>>>PYTHON<<<<<###
+# Task 3
+import sklearn
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+y = pd.Series([2, 3, 4, 3, 5, 41])
+x = pd.Series([2, 3, 4, 5, 6, 71])
+
+correlation = y.corr(x)
+print(correlation)
+
+#--------------------------------
