@@ -1,0 +1,192 @@
+############-B3-############
+
+Functioning with dates, characters, functions, Distributing data, Scripting for data cleaning
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+data = pd.read_csv("C:/Users/praty/Desktop/RetailDataX.csv")
+
+# Analyzing Data
+print(data.head())
+print(data.tail())
+## Summary of the dataset
+print(data.info())
+## Finding count of Null values in each column
+print(data.isna().sum())
+## Printing all null values in 'Description' column
+print(data[data['Description'].isna()])
+## Printing all null values in 'CustomerID' column
+print(data[data['CustomerID'].isna()])
+
+# Scripting for Data Cleaning
+## Removing rows with null values
+new_df1 = data.dropna()
+print(new_df1.isna().sum())
+
+## Replace null values with a default value
+new_df2 = data.copy()
+new_df2['Description'] = new_df2["Description"].fillna("Default Product")
+new_df2['CustomerID'] = new_df2["CustomerID"].fillna(600000)
+
+print(data.isna().sum())  # before
+print(new_df2.isna().sum())  # after
+
+print(data.loc[680])  # before
+print(new_df2.loc[680])  # after
+
+## Remove irregularities in data
+print(data.loc[1511])  # before
+filtered = new_df2[(new_df2['Country'] == "EIRE")].index
+new_df2.drop(filtered)
+print(new_df2.loc[1511])  # after
+
+
+# Functioning with Dates
+new_df3 = data.copy()
+## Check the datatype of date column
+print(new_df3['date_added'])
+
+## Converting dates to correct format i.e. in dd-mm-yyyy
+date = pd.to_datetime(new_df3['date_added'], dayfirst=True)
+new_df3['date_added'] = date.dt.strftime('%d-%m-%Y')
+print(new_df3['date_added'])
+
+## Removing rows with Null date value
+new_df3.dropna(subset=['date_added'])
+print("Count of rows with Null date value: ", new_df3['date_added'].isna().sum())
+
+
+# Character Operations
+new_df8 = data.copy()
+## Replace characters in column
+print(new_df8['Description'].head(), "\n", new_df8['Country'].head())
+new_df8 = new_df8.replace(" ", '+', regex=True)
+print("\n", new_df8['Description'].head(), "\n", new_df8['Country'].head())
+
+
+# Functions
+new_df4 = data.copy()
+## Check for duplicates
+print(new_df4.duplicated())
+new_df4.drop_duplicates()
+
+## Replacing values using Mean
+print(new_df4.loc[680])  # before
+x = new_df4["CustomerID"].mean()
+new_df4["CustomerID"] = new_df4["CustomerID"].fillna(x)
+print(new_df4.loc[680])  # after
+
+## Replacing values using Median
+new_df5 = data.copy()
+print(new_df5.loc[680])  # before
+x = new_df5["CustomerID"].median()
+new_df5["CustomerID"] = new_df5["CustomerID"].fillna(x)
+print(new_df5.loc[680])  # after
+
+## Replacing values using Mode
+new_df6 = data.copy()
+print(new_df6.loc[680])  # before
+x = new_df6["CustomerID"].mode()
+new_df6["CustomerID"] = new_df6["CustomerID"].fillna(x)
+print(new_df6.loc[680])  # after
+
+# Distributing Data
+new_df5 = data.copy()
+new_df5Num = new_df5.select_dtypes(include='number')
+## Data Correlation
+print(new_df5Num.corr())
+
+## Detect Outliers
+for col in data.columns:
+    print(new_df5[col].describe())
+
+## Plotting
+### Visualizing Dataframe
+new_df5Num.plot()
+plt.show()
+
+### Scatter Plot
+new_df5Num.plot(kind='scatter', x='Quantity', y='UnitPrice')
+plt.show()
+
+#--------------------------
+
+
+############-B1-############
+
+Creating & Working with vectors , matrices , lists , arrays , data frames
+
+### CREATING AND WORKING WITH VECTORS import numpy as np )import pandas as pd
+A_VECTOR= np.array ([1, 2, 3, 4, 5]) print (a)
+print(type (a))
+###MATRICES
+##2D array
+b = np.array ([[1, 2, 3], [4, 5, 6]])
+##3D annay
+c = np.array ([[[1, 2, 3], [4, 5, 6]1, [(1, 2, 3], [4, 5, 6]]])
+##CHECKING DIMENSIONS print (b.ndim)
+#LIST
+LE[' JHAI'.
+'ABHI'
+'ZHAI', 'OMKAR'1
+LEO1
+#VECTOR
+A=np.array ([1, 2, 3, 4, 5])
+#dataframe cEpd.read_csv("C:/Users/aaabh/Downloads/telecom_churn.csv")
+df=pd.dataframe (c)
+df
+print(df.duplicated()) ##checking for duplicates df.corr()
+print (df.info0))
+new_df = df.dropna().
+##removing null values
+df.fillna(130, inplace.=_True). #tinsenting value into NA
+
+#--------------------------
+
+
+############-B2-############
+
+missing values , special values , Imputation for fields where data is missing , join data
+
+head(airquality)
+df=data.frame(head(airquality,10))
+df
+
+summary(df)
+
+n=is.na(df)
+sum(n)
+
+df$Ozone[is.na(df$Ozone)]=mean(df$Ozone,na.rn=T)
+summary(df$Ozone)
+
+for(i in 1:nrow(df))
+{
+  if(is.na(df$Solar.R[i])){
+    df$Solar.R[1]=mean(df$Solar.R,na.rm=T)
+  }
+}
+
+summary(df$Solar.R)
+summary(df)
+
+
+##Merging
+df1=data.frame(cars=c('nissan','toyota'),year=c(1997,1996))
+df1
+df2=data.frame(model=c('Skyline','Supra'),year=c(1997,1996))
+df2
+#theta join
+merge(x=df1,y=df2,by="year")
+#left outer
+merge(x=df1,y=df2,by="year",all.x=TRUE)
+#right outer
+merge(x=df1,y=df2,by="year",all.y=TRUE)
+#FULL outer
+merge(x=df1,y=df2,by="year",all=TRUE)
+#Cartesian product
+merge(x=df1,y=df2,by=NULL)
+
+#--------------------------
